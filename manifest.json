@@ -1,0 +1,36 @@
+{
+  "name": "YT-NonStop",
+  "author": "Ignotum77",
+  "version": "1.6.0",
+  "description": "Deletes the annoying \"Video paused. Continue watching?\" confirmation on YouTube and keeps YouTube running nonstop without autoplay message!",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "@YT-NonStop",
+      "strict_min_version": "100.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "permissions": [ "storage", "https://www.youtube.com/*", "https://music.youtube.com/*" ],
+  "background": {
+    "scripts": [ "background.js" ]
+  },
+  "content_scripts": [
+    {
+      "matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ],
+      "js": [ "script.js" ],
+      "run_at": "document_end"
+    }
+  ],
+  "page_action": {
+    "default_icon": "images/ytn128.png",
+    "default_popup": "popup.html",
+    "show_matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ]
+  },
+  "icons": {
+    "48": "images/ytn48.png",
+    "128": "images/ytn128.png"
+  },
+  "manifest_version": 2
+}
