@@ -6,9 +6,9 @@
 [![Issues](https://img.shields.io/github/issues-closed/Ignotum77/YT-Nonstop?color=green&label=Issues)](https://github.com/Ignotum77/YT-Nonstop/issues?q=is%3Aissue+is%3Aclosed)
 [![GitHub Release Date](https://img.shields.io/github/release-date/Ignotum77/YT-Nonstop?color=white&label=Latest%20Release)](https://github.com/Ignotum77/YT-Nonstop/releases/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?label=License&color=lightgrey)](https://github.com/Ignotum77/YT-Nonstop/blob/main/LICENSE) </br>
-[![](https://img.shields.io/amo/v/yt-nonstop?label=FireFox&color=important)](https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/)
-[![](https://img.shields.io/amo/rating/yt-nonstop?label=Rating&color=yellow)](https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/)
-[![](https://img.shields.io/amo/users/yt-nonstop?label=Users&color=blueviolet)](https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/)
+[![](https://img.shields.io/amo/v/yt_nonstop?label=FireFox&color=important)](https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/)
+[![](https://img.shields.io/amo/rating/yt_nonstop?label=Rating&color=yellow)](https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/)
+[![](https://img.shields.io/amo/users/yt_nonstop?label=Users&color=blueviolet)](https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/)
 ***
 # YT-Nonstop
 
