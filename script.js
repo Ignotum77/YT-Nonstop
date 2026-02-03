@@ -95,10 +95,10 @@ let YTNonstop = (function YTNonstop(options) {
     }
 
     const autonav_button_style = () => {
-        const autonav = YTMusic ? document.querySelector('.autoplay-with-toggle.ytmusic-player-queue') :
+        const autonav = YTMusic ? document.querySelector('.autoplay') :
                                   document.querySelector('.ytp-button[data-tooltip-target-id="ytp-autonav-toggle-button"]');
 
-        autonav.setAttribute("style", "height:0px; width:0px; opacity:0");
+        autonav.setAttribute("style", "display:none");
         log('Hide autoplay/autonav, since the button is overriden');
     }
 
