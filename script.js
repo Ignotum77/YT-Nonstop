@@ -79,9 +79,9 @@ let YTNonstop = (function YTNonstop(options) {
     }
 
     const autonav_button = () => {
-        const autonav_on = YTMusic ? document.querySelector('#automix[role="button"][aria-pressed="true"]') :
+        const autonav_on = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="true"]') :
                                      document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="true"]');
-        const autonav_off = YTMusic ? document.querySelector('#automix[role="button"][aria-pressed="false"]') :
+        const autonav_off = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]') :
                                       document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="false"]');
 
         if (autotube.getIsAutoSkip() == true && autonav_off) {
@@ -92,6 +92,14 @@ let YTNonstop = (function YTNonstop(options) {
             autonav_on.click();
             log('Disabled autoplay/autonav');
         }
+    }
+
+    const autonav_button_style = () => {
+        const autonav = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer') :
+                                  document.querySelector('button.ytp-autonav-toggle');
+
+        autonav.setAttribute("style", "height:0px; width:0px; opacity:0;");
+        log('Hide autoplay/autonav, since the button is overriden');
     }
 
     function run() {
@@ -120,6 +128,7 @@ let YTNonstop = (function YTNonstop(options) {
 
                 // set autonav button
                 autonav_button();
+                autonav_button_style();
 
                 clearInterval(loadSettings.setSettings);
             }, 1000),
