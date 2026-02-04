@@ -94,14 +94,6 @@ let YTNonstop = (function YTNonstop(options) {
         }
     }
 
-    const autonav_button_style = () => {
-        const autonav = YTMusic ? document.querySelector('.autoplay') :
-                                  document.querySelector('.ytp-button[data-tooltip-target-id="ytp-autonav-toggle-button"]');
-
-        autonav.setAttribute("style", "display:none");
-        log('Hide autoplay/autonav, since the button is overriden');
-    }
-
     function run() {
         const play_button = {
             getButton: window.document.getElementsByClassName('ytp-play-button ytp-button')[0]
@@ -128,7 +120,6 @@ let YTNonstop = (function YTNonstop(options) {
 
                 // set autonav button
                 autonav_button();
-                autonav_button_style();
 
                 clearInterval(loadSettings.setSettings);
             }, 1000),
