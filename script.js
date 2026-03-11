@@ -18,11 +18,12 @@ function injectScript(YTNonstop, tag) {
 let YTNonstop = (function YTNonstop(options) {
     const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     const autotube = {
-         _autoSkip: null,
-         //getters
-         getIsAutoSkip: function() { return autotube._autoSkip},
-         // setters
-         setAutoSkip: function(value) { return autotube._autoSkip = value},
+        _autoSkip: null,
+        //getters and setters
+        getIsAutoSkip: function() { return autotube._autoSkip},
+        setAutoSkip: function(value) { return autotube._autoSkip = value},
+        getLastAutonavState: function() { return autotube._lastAutonavState },
+        setLastAutonavState: function(value) { autotube._lastAutonavState = value }
     }
     const YTMusic = window.location.hostname === 'music.youtube.com';
     const videoPlayer = {
@@ -79,70 +80,77 @@ let YTNonstop = (function YTNonstop(options) {
     }
 
     const autonav_button = () => {
-        const autonav_on = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="true"]') :
-                                     document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="true"]');
-        const autonav_off = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]') :
-                                      document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="false"]');
+        const autonav_on = YTMusic
+            ? document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="true"]')
+            : document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="true"]');
+        const autonav_off = YTMusic
+            ? document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]')
+            : document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="false"]');
 
-        if (autotube.getIsAutoSkip() == true && autonav_off) {
+        const desired = autotube.getIsAutoSkip();
+        const last = autotube.getLastAutonavState();
+
+        if (last === desired) return; // prevent repeat clicks
+
+        if (desired === true && autonav_off) {
             autonav_off.click();
+            autotube.setLastAutonavState(true);
             log('Enabled autoplay/autonav');
         } else
-        if (autotube.getIsAutoSkip() == false && autonav_on) {
+        if (desired === false && autonav_on) {
             autonav_on.click();
+            autotube.setLastAutonavState(false);
             log('Disabled autoplay/autonav');
         }
     }
 
     const autonav_button_style = () => {
         const autonav = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer') :
-                                  document.querySelector('button.ytp-autonav-toggle');
-
-        autonav.setAttribute("style", "height:0px; width:0px; opacity:0;");
-        log('Hide autoplay/autonav, since the button is overriden');
+                                  document.querySelector('.ytp-chrome-controls button.ytp-autonav-toggle');
+        if (autonav) {
+            autonav.style.cssText = "height:0;width:0;opacity:0;";
+            log('Hide autoplay/autonav, since the button is overriden');
+        }
     }
 
     function run() {
         const play_button = {
-            getButton: window.document.getElementsByClassName('ytp-play-button ytp-button')[0]
-                    || window.document.getElementById('play-pause-button'),
+            getButton: window.document.querySelector('.ytp-chrome-controls .ytp-play-button.ytp-button')
+                    || window.document.querySelector('#play-pause-button'),
             config: { attributes: true, childList: true, subtree: true },
             callback: (mutationsList, observer) => {
                 play();
                 skip();
             }
-        }
+        };
 
         const loadSettings = {
-            setSettings: setInterval(() => {
-                if (window.location.href.indexOf("/watch") == -1) return;
+            // Combined MutationObserver to watch for both play button and autonav button
+            setSettings: new MutationObserver((mutationsList, observer) => {
+                // Check if we are on a "/watch" page
+                if (window.location.href.indexOf("/watch") === -1) return;
 
-                // set play button observer
-                try {
+                // Check for the play button
+                const playButton = play_button.getButton;
+                if (playButton) {
+                    // Set up the play button observer if the button is found
                     const play_button_observer = new MutationObserver(play_button.callback);
-                    play_button_observer.observe(play_button.getButton, play_button.config);
-                } catch(e) {
-                    log('Play button does not exist; reload page');
-                    window.location.reload();
+                    play_button_observer.observe(playButton, play_button.config);
+                    log('Play button observer set up successfully');
+                    // Once the play button is found, disconnect this observer
+                    observer.disconnect();
+                    log('Play button observer disconnected');
                 }
 
-                // set autonav button
-                autonav_button();
-                autonav_button_style();
+                // Handle the autonav button changes
+                autonav_button();  // Trigger autonav button function
+                autonav_button_style();  // Adjust style for autonav button
+            }),
 
-                clearInterval(loadSettings.setSettings);
-            }, 1000),
-
-            setAutonavButton: setInterval(() => {
-                if (window.location.href.indexOf("/watch") == -1) {
-                    if (document.querySelector('ytd-app[miniplayer-is-active]') || document.querySelector('ytmusic-player-bar:not([player-page-open_])')) {
-                        autonav_button();
-                    } else {
-                        return;
-                    }
-                }
-                autonav_button();
-            }, 5000),
+            // Start observing the document body for changes to detect the play button and autonav button
+            startObserving: function() {
+                this.setSettings.observe(document.body, { childList: true, subtree: true });
+            },
 
             // Autoplay Method 1: Set last time active all 20 minutes to now
             // Autoplay Method 2: If video paused and popup visible ---> play video
@@ -161,7 +169,15 @@ let YTNonstop = (function YTNonstop(options) {
                 log('Reset last time active');
                 play();
             }, 600000)
-        }
+        };
+
+        // Start observing for changes in the document body to detect play and autonav button
+        loadSettings.startObserving();
+
+        // Call autonav_button regularly to react to changes in autoplay toggle
+        setInterval(() => {
+            autonav_button();
+        }, 5000);
 
         return autotube;
     };
