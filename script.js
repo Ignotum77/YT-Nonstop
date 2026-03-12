@@ -19,6 +19,7 @@ let YTNonstop = (function YTNonstop(options) {
     const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     const autotube = {
         _autoSkip: null,
+        //getters and setters
         getIsAutoSkip: function() { return autotube._autoSkip},
         setAutoSkip: function(value) { return autotube._autoSkip = value},
     }
@@ -56,8 +57,9 @@ let YTNonstop = (function YTNonstop(options) {
         if (YTMusic || autotube.getIsAutoSkip() === false) return;
 
         const overlay = document.querySelector('.ytp-autonav-endscreen-countdown-overlay');
+        const overlay_hidden = document.querySelector('.ytp-autonav-endscreen-countdown-overlay[style="display: none;"]');
 
-        if (overlay) {
+        if (overlay && !overlay_hidden) {
             overlay.remove();
             videoPlayer.player().nextVideo();
             log('Skipped to next video');
