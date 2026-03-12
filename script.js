@@ -19,11 +19,8 @@ let YTNonstop = (function YTNonstop(options) {
     const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     const autotube = {
         _autoSkip: null,
-        //getters and setters
         getIsAutoSkip: function() { return autotube._autoSkip},
         setAutoSkip: function(value) { return autotube._autoSkip = value},
-        getLastAutonavState: function() { return autotube._lastAutonavState },
-        setLastAutonavState: function(value) { autotube._lastAutonavState = value }
     }
     const YTMusic = window.location.hostname === 'music.youtube.com';
     const videoPlayer = {
@@ -47,7 +44,7 @@ let YTNonstop = (function YTNonstop(options) {
         // Make sure that the right popup is shown
         const wrongPopup = document.querySelector('YT-CONFIRM-DIALOG-RENDERER #cancel-button:not([hidden])');
 
-        if (videoPlayer.player().getPlayerState() === 2 && popupEventNodename && !wrongPopup) {
+        if (popupEventNodename && !wrongPopup) {
             videoPlayer.player().playVideo();
             popupContainer.handleClosePopupAction_();
             log('Popup hidden and video played again');
@@ -56,50 +53,29 @@ let YTNonstop = (function YTNonstop(options) {
 
     // if video ended ---> skip to next video
     const skip = () => {
-        if (videoPlayer.player().getPlayerState() === 0 && !YTMusic) {
-            const overlay = document.querySelector('.ytp-autonav-endscreen-countdown-overlay[style="display: none;"]');
-            const overlay_v = document.getElementsByClassName('ytp-autonav-endscreen-countdown-overlay')[0];
-            const next = document.getElementsByClassName('ytp-autonav-endscreen-upnext-play-button')[0];
-            const cancel = document.getElementsByClassName('ytp-autonav-endscreen-upnext-cancel-button')[0];
-            const autonav_off = document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="false"]');
+        if (YTMusic || autotube.getIsAutoSkip() === false) return;
 
-            if (autotube.getIsAutoSkip() == true && (!overlay || autonav_off)) {
-                // videoPlayer.player().setAutonav(true);
-                // videoPlayer.player().nextVideo();
-                overlay_v.remove();
-                next.click();
-                log('Skipped to next video');
-            } else
-            if (autotube.getIsAutoSkip() == false && !overlay) {
-                // videoPlayer.player().setAutonav(false);
-                overlay_v.remove();
-                cancel.click();
-                log('Canceled next video');
-            }
+        const overlay = document.querySelector('.ytp-autonav-endscreen-countdown-overlay');
+
+        if (overlay) {
+            overlay.remove();
+            videoPlayer.player().nextVideo();
+            log('Skipped to next video');
         }
     }
 
     const autonav_button = () => {
-        const autonav_on = YTMusic
-            ? document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="true"]')
-            : document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="true"]');
-        const autonav_off = YTMusic
-            ? document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]')
-            : document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="false"]');
+        const autonav_on = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="true"]') : 
+                                     document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="true"]');
+        const autonav_off = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]') : 
+                                      document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="false"]');
 
-        const desired = autotube.getIsAutoSkip();
-        const last = autotube.getLastAutonavState();
-
-        if (last === desired) return; // prevent repeat clicks
-
-        if (desired === true && autonav_off) {
+        if (autotube.getIsAutoSkip() === true && autonav_off) {
             autonav_off.click();
-            autotube.setLastAutonavState(true);
             log('Enabled autoplay/autonav');
         } else
-        if (desired === false && autonav_on) {
+        if (autotube.getIsAutoSkip() === false && autonav_on) {
             autonav_on.click();
-            autotube.setLastAutonavState(false);
             log('Disabled autoplay/autonav');
         }
     }
@@ -107,44 +83,33 @@ let YTNonstop = (function YTNonstop(options) {
     const autonav_button_style = () => {
         const autonav = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer') :
                                   document.querySelector('.ytp-chrome-controls button.ytp-autonav-toggle');
-        if (autonav) {
+        const computedStyle = window.getComputedStyle(autonav);
+
+        if (computedStyle.height !== "0px" && computedStyle.opacity !== "0") {
             autonav.style.cssText = "height:0;width:0;opacity:0;";
             log('Hide autoplay/autonav, since the button is overriden');
         }
     }
 
     function run() {
-        const play_button = {
-            getButton: window.document.querySelector('.ytp-chrome-controls .ytp-play-button.ytp-button')
-                    || window.document.querySelector('#play-pause-button'),
-            config: { attributes: true, childList: true, subtree: true },
-            callback: (mutationsList, observer) => {
-                play();
-                skip();
-            }
-        };
-
+        // Set up MutationObserver to detect buttons
         const loadSettings = {
-            // Combined MutationObserver to watch for both play button and autonav button
             setSettings: new MutationObserver((mutationsList, observer) => {
                 // Check if we are on a "/watch" page
                 if (window.location.href.indexOf("/watch") === -1) return;
 
-                // Check for the play button
-                const playButton = play_button.getButton;
-                if (playButton) {
-                    // Set up the play button observer if the button is found
-                    const play_button_observer = new MutationObserver(play_button.callback);
-                    play_button_observer.observe(playButton, play_button.config);
-                    log('Play button observer set up successfully');
-                    // Once the play button is found, disconnect this observer
-                    observer.disconnect();
-                    log('Play button observer disconnected');
+                // Handle play and skip functions
+                const player = videoPlayer.player();
+                if (player && player.getPlayerState() === 2) {
+                    play();
+                }
+                if (player && player.getPlayerState() === 0) {
+                    skip();
                 }
 
                 // Handle the autonav button changes
-                autonav_button();  // Trigger autonav button function
-                autonav_button_style();  // Adjust style for autonav button
+                autonav_button();
+                autonav_button_style();
             }),
 
             // Start observing the document body for changes to detect the play button and autonav button
@@ -152,22 +117,10 @@ let YTNonstop = (function YTNonstop(options) {
                 this.setSettings.observe(document.body, { childList: true, subtree: true });
             },
 
-            // Autoplay Method 1: Set last time active all 20 minutes to now
-            // Autoplay Method 2: If video paused and popup visible ---> play video
-            // Autoplay Method 3: Pause and UnPause after 20 minutes
+            // Autoplay Method: Set last time active all 20 minutes to now
             setOtherMethods: setInterval(() => {
-                if (window.location.href.indexOf("/watch") == -1) {
-                    if (document.querySelector('ytd-app[miniplayer-is-active]') || document.querySelector('ytmusic-player-bar:not([player-page-open_])')) {
-                        window._lact = Date.now();
-                        log('Reset last time active');
-                        play();
-                    } else {
-                        return;
-                    }
-                }
                 window._lact = Date.now();
                 log('Reset last time active');
-                play();
             }, 600000)
         };
 
@@ -175,9 +128,9 @@ let YTNonstop = (function YTNonstop(options) {
         loadSettings.startObserving();
 
         // Call autonav_button regularly to react to changes in autoplay toggle
-        setInterval(() => {
-            autonav_button();
-        }, 5000);
+        //setInterval(() => {
+        //    autonav_button();
+        //}, 5000);
 
         return autotube;
     };
