@@ -54,7 +54,7 @@ let YTNonstop = (function YTNonstop(options) {
 
     // if video ended ---> skip to next video
     const skip = () => {
-        if (YTMusic || autotube.getIsAutoSkip() === false) return;
+        if (YTMusic || autotube.getIsAutoSkip() == false) return;
 
         const overlay = document.querySelector('.ytp-autonav-endscreen-countdown-overlay');
         const overlay_hidden = document.querySelector('.ytp-autonav-endscreen-countdown-overlay[style="display: none;"]');
@@ -72,11 +72,11 @@ let YTNonstop = (function YTNonstop(options) {
         const autonav_off = YTMusic ? document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]') : 
                                       document.querySelector('.ytp-autonav-toggle-button-container > .ytp-autonav-toggle-button[aria-checked="false"]');
 
-        if (autotube.getIsAutoSkip() === true && autonav_off) {
+        if (autotube.getIsAutoSkip() == true && autonav_off) {
             autonav_off.click();
             log('Enabled autoplay/autonav');
         } else
-        if (autotube.getIsAutoSkip() === false && autonav_on) {
+        if (autotube.getIsAutoSkip() == false && autonav_on) {
             autonav_on.click();
             log('Disabled autoplay/autonav');
         }
