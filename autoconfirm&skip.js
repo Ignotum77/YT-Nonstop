@@ -1,4 +1,9 @@
 function injectScript(YTNonstop, tag) {
+    policyDefault = trustedTypes.createPolicy('default', {
+        createHTML: string => string,
+        createScript: string => string
+    });
+
     var node = document.getElementsByTagName(tag)[0];
     var init_inject_script = document.createElement('script');
     var run_inject_script = document.createElement('script');
@@ -160,18 +165,5 @@ let YTNonstop = (function YTNonstop(options) {
     // Return YTNonstop object
     return YTNonstop;
 });
-
-window.onload = (event) => {
-    chrome.runtime.onMessage.addListener( (data) => {
-        postMessage(data, '*');
-    });
-    chrome.storage.sync.get(null, function(data) {
-        data = {
-            autoSkip: data.autoSkip === undefined || data.autoSkip === null ? true : JSON.parse(data.autoSkip),
-        }
-        postMessage(data, '*');
-        // injectScript(YTNonstop, 'html');
-    });
-};
 
 injectScript(YTNonstop, 'html');
