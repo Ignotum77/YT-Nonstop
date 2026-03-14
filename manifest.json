@@ -12,9 +12,10 @@
       }
     }
   },
-  "permissions": [ "storage", "https://www.youtube.com/*", "https://music.youtube.com/*" ],
+  "permissions": [ "declarativeContent", "storage", "tabs" ],
+  "host_permissions": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ],
   "background": {
-    "scripts": [ "background.js" ]
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -23,7 +24,13 @@
       "run_at": "document_end"
     }
   ],
-  "page_action": {
+  "web_accessible_resources": [
+    {
+      "resources": [ "autoconfirm&skip.js" ],
+      "matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ]
+    }
+  ],
+  "action": {
     "default_icon": "images/ytn128.png",
     "default_popup": "popup.html",
     "show_matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ]
@@ -32,5 +39,5 @@
     "48": "images/ytn48.png",
     "128": "images/ytn128.png"
   },
-  "manifest_version": 2
+  "manifest_version": 3
 }
