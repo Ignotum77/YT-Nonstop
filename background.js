@@ -5,7 +5,7 @@ function Reload() {
   browser.tabs.query({
     url: [
       "https://www.youtube.com/*",
-      "https://music.youtube.com/*"
+      "https://music.youtube.com/*",
       "https://m.youtube.com/*"
     ]
   }).then(tabs => {
