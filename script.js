@@ -47,7 +47,7 @@ let YTNonstop = (function YTNonstop(options) {
     }
     else if (YTMobile) {
       popupEventNodename = document.querySelector('.confirm-dialog-messages');
-      popupContainer = document.getElementsByTagName('dialog')[0].parentElement;
+      popupContainer = document.querySelectorAll('.dialog-container');
       goodPopup = document.querySelectorAll('.dialog-container > dialog button').length == 1;
     }
     else if (YTDesktop) {
