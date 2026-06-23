@@ -25,7 +25,7 @@
   ],
   "browser_action": {
     "default_icon": "images/ytn128.png",
-    "default_popup": "popup.html",
+    "default_popup": "popup.html"
   },
   "page_action": {
     "default_icon": "images/ytn128.png",
