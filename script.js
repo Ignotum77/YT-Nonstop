@@ -47,7 +47,7 @@ let YTNonstop = (function YTNonstop(options) {
     }
     else if (YTMobile) {
       popupEventNodename = document.querySelector('.confirm-dialog-messages');
-      popupContainer = document.querySelectorAll('.dialog-container');
+      popupContainer = document.querySelector('.dialog-container');
       goodPopup = document.querySelectorAll('.dialog-container > dialog button').length == 1;
     }
     else if (YTDesktop) {
@@ -125,6 +125,7 @@ let YTNonstop = (function YTNonstop(options) {
     else if (YTDesktop) {
       autonav = document.querySelector('.ytp-chrome-controls button.ytp-autonav-toggle');
     }
+    if (!autonav) return;
     const computedStyle = window.getComputedStyle(autonav);
 
     if (computedStyle.height !== "0px" && computedStyle.opacity !== "0") {
@@ -202,10 +203,10 @@ let YTNonstop = (function YTNonstop(options) {
 });
 
 window.onload = (event) => {
-  chrome.runtime.onMessage.addListener( (data) => {
+  browser.runtime.onMessage.addListener( (data) => {
     postMessage(data, '*');
   });
-  chrome.storage.sync.get(null, function(data) {
+  browser.storage.sync.get(null).then((data) => {
     data = {
       autoSkip: data.autoSkip === undefined || data.autoSkip === null ? true : JSON.parse(data.autoSkip),
     }
