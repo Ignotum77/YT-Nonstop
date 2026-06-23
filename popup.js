@@ -10,7 +10,7 @@ window.onload = () => {
 
 // helpers
 function setSettings(items){
-  chrome.storage.sync.get(null, function(data) {
+  browser.storage.sync.get(null).then((data) => {
     const setItems = {};
     items.forEach( ({key, cb}) => {
       if (data === undefined || data[key] === undefined || data[key] === null) {
@@ -22,7 +22,9 @@ function setSettings(items){
       }
     });
     // update items if they were undefined or null
-    Object.keys(setItems).length > 0 && chrome.storage.sync.set(setItems, function() {});
+    if (Object.keys(setItems).length > 0) {
+      browser.storage.sync.set(setItems);
+    }
   });
 }
 
@@ -30,19 +32,18 @@ function setAutoTubeListeners(key) {
   const value = {
     autoSkip: document.getElementById('autoskip-toggle').checked,
   }[key];
-  chrome.tabs.query({
+  browser.tabs.query({
     url: [
       "https://www.youtube.com/*",
       "https://music.youtube.com/*",
       "https://m.youtube.com/*"
     ]
-  },
-  (tabs) => {
-    for (let tab of tabs) {
-      chrome.tabs.sendMessage(tab.id, {[key]: value});
+  }).then((tabs) => {
+    for (const tab of tabs) {
+      browser.tabs.sendMessage(tab.id, {[key]: value}).catch(() => {});
     }
   });
-  chrome.storage.sync.set({[key]: value});
+  browser.storage.sync.set({[key]: value});
 }
 
 function setAutoSkip(status) {
