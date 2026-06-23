@@ -193,7 +193,7 @@ let YTNonstop = (function YTNonstop(options) {
     }
   }
   addEventListener('message', function(data) {
-    for (key in data.data) {
+    for (const key in data.data) {
       eventHandler(key, data.data[key]);
     }
   });

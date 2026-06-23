@@ -14,7 +14,7 @@ function setSettings(items){
     const setItems = {};
     items.forEach( ({key, cb}) => {
       if (data === undefined || data[key] === undefined || data[key] === null) {
-        setItems.key = cb(true);
+        setItems[key] = cb(true);
       } else if(!data[key]) {
         cb(false);
       } else {
