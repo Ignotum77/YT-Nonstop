@@ -10,8 +10,8 @@
 ***
 # YT-Nonstop
 
-Autoclicker for Youtube's latest "feature" - Video paused. Continue watching?</br>
-Furthermore it keeps YouTube running and auto-skip to the next video on the list 🔥
+Autoclicker for Youtube's "feature" - Video paused. Continue watching?</br>
+Furthermore it keeps YouTube running and auto-skip to the next video on the list if enabled 🔥
 
 <p align="center">
 <a href="https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/"><img src="https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png" alt="Get YT-Nonstop for Firefox"></a>
