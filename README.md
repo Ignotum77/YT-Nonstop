@@ -12,7 +12,7 @@
 
 It gets you rid of Youtube's "feature" - Video paused. Continue watching?</br>
 It also comes with a build-in autoplay on/off feature that either disables YT's autoplay or, when enabled, skips the endscreen countdown.
-Therefore YT's own autoplay button is hidden.
+Therefore YT's own autoplay button is hidden.</br>
 Beside support for `www.youtube.com` and `music.youtube.com`, it also supports `m.youtube.com` for both desktop and Android.
 
 <p align="center">
