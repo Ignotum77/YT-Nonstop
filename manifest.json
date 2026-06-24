@@ -2,7 +2,7 @@
   "name": "YT-NonStop",
   "author": "Ignotum77",
   "version": "1.8.1",
-  "description": "Deletes the annoying \"Video paused. Continue watching?\" confirmation on YouTube and keeps YouTube running nonstop without autoplay message!",
+  "description": "It gets you rid of Youtube's \"feature\" - Video paused. Continue watching? It also comes with an autoplay on/off feature that disables YT's autoplay or skips the endscreen countdown to the next video.",
   "browser_specific_settings": {
     "gecko": {
       "id": "@YT-NonStop",
