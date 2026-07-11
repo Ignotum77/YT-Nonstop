@@ -138,21 +138,27 @@ let YTNonstop = (function YTNonstop(options) {
     // Set up MutationObserver to detect buttons
     const loadSettings = {
       setSettings: new MutationObserver((mutationsList, observer) => {
-        // Check if we are on a "/watch" page
-        if (window.location.href.indexOf("/watch") === -1) return;
-
-        // Handle play and skip functions
-        const player = videoPlayer.player();
-        if (player && player.getPlayerState() === 2) {
-          play();
+        // Check if we are on a "/watch" page or `ytd-miniplayer` is active to handle the autonav button changes
+        if (window.location.href.indexOf("/watch") === -1) {
+          if (YTMobile) return;
+          const mini = document.querySelector('ytd-miniplayer');
+          if (YTDesktop && !mini) return;
         }
-        if (player && player.getPlayerState() === 0) {
-          skip();
-        }
-
-        // Handle the autonav button changes
         autonav_button();
-        autonav_button_style();
+
+        // Check if we are on a "/watch" page to handle play and skip functions
+        if (window.location.href.indexOf("/watch") !== -1) {
+          const player = videoPlayer.player();
+          if (player && player.getPlayerState() === 2) {
+            play();
+          }
+          if (player && player.getPlayerState() === 0) {
+            skip();
+          }
+
+          // Handle the autonav button layout
+          autonav_button_style();
+        }
       }),
 
       // Start observing the document body for changes to detect the play button and autonav button
