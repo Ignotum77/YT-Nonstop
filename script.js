@@ -141,7 +141,7 @@ let YTNonstop = (function YTNonstop(options) {
         // Check if we are on a "/watch" page or `ytd-miniplayer` is active to handle the autonav button changes
         if (window.location.href.indexOf("/watch") === -1) {
           if (YTMobile) return;
-          const mini = document.querySelector('ytd-miniplayer');
+          const mini = document.querySelector('ytd-app[miniplayer-is-active] > ytd-miniplayer');
           if (YTDesktop && !mini) return;
         }
         autonav_button();
