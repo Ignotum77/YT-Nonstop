@@ -22,6 +22,7 @@ let YTNonstop = (function YTNonstop(options) {
     getIsAutoSkip: function() { return autotube._autoSkip},
     setAutoSkip: function(value) { return autotube._autoSkip = value},
   }
+  const YTAndroid = window.navigator.userAgent.indexOf('Android') > -1;
   const YTMusic = window.location.hostname === 'music.youtube.com';
   const YTMobile = window.location.hostname === 'm.youtube.com'; // m.youtube.com/?persist_app=1&app=m
   const YTDesktop = window.location.hostname === 'www.youtube.com';
@@ -91,7 +92,9 @@ let YTNonstop = (function YTNonstop(options) {
   const autonav_button = () => {
     let autonav_on;
     let autonav_off;
-    if (YTMusic) {
+    if (YTMusic && YTAndroid) {
+    }
+    else if (YTMusic) {
       autonav_on = document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="true"]');
       autonav_off = document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]');
     }
@@ -116,7 +119,9 @@ let YTNonstop = (function YTNonstop(options) {
 
   const autonav_button_style = () => {
     let autonav;
-    if (YTMusic) {
+    if (YTMusic && YTAndroid) {
+    }
+    else if (YTMusic) {
       autonav = document.querySelector('.autoplay.ytmusic-tab-renderer');
     }
     else if (YTMobile) {
@@ -177,8 +182,9 @@ let YTNonstop = (function YTNonstop(options) {
     loadSettings.startObserving();
 
     // Fix video background play - https://greasyfork.org/en/scripts/371641-video-background-play-fix/code
-    if (YTMobile) {
+    if (YTAndroid) {
       Object.defineProperties(document, { 'hidden': {value: false}, 'visibilityState': {value: 'visible'} });
+      window.addEventListener('visibilitychange', evt => evt.stopImmediatePropagation(), true);
     }
 
     return autotube;
