@@ -93,10 +93,12 @@ let YTNonstop = (function YTNonstop(options) {
     let autonav_on;
     let autonav_off;
     if (YTMusic && YTAndroid) {
+      autonav_on = document.querySelector('.autoplay-with-toggle.ytmusic-player-queue > #automix[role="button"][aria-pressed="true"]');
+      autonav_off = document.querySelector('.autoplay-with-toggle.ytmusic-player-queue > #automix[role="button"][aria-pressed="false"]');
     }
     else if (YTMusic) {
       autonav_on = document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="true"]');
-      autonav_off = document.querySelector('.autoplay.ytmusic-tab-renderer> #automix[role="button"][aria-pressed="false"]');
+      autonav_off = document.querySelector('.autoplay.ytmusic-tab-renderer > #automix[role="button"][aria-pressed="false"]');
     }
     else if (YTMobile) {
       autonav_on = document.querySelector('player-autonav-toggle > button.ytwAutonavToggleButtonHost[aria-pressed="true"]');
@@ -120,6 +122,7 @@ let YTNonstop = (function YTNonstop(options) {
   const autonav_button_style = () => {
     let autonav;
     if (YTMusic && YTAndroid) {
+      autonav = document.querySelector('.autoplay-with-toggle.ytmusic-player-queue');
     }
     else if (YTMusic) {
       autonav = document.querySelector('.autoplay.ytmusic-tab-renderer');
