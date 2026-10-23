@@ -14,6 +14,7 @@ It gets you rid of Youtube's "feature" - Video paused. Continue watching?</br>
 It also comes with a build-in autoplay on/off feature that either disables YT's autoplay or, when enabled, skips the endscreen countdown.
 Therefore YT's own autoplay button is hidden.</br>
 Beside support for `www.youtube.com` and `music.youtube.com`, it also supports `m.youtube.com` for both desktop and Android.
+Be aware that all YouTube tabs will be reloaded on installation. Otherwise this addon doesn't work correctly.
 
 <p align="center">
 <a href="https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/"><img src="https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png" alt="Get YT-Nonstop for Firefox"></a>
