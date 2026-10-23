@@ -1,5 +1,5 @@
-[![Commit rate `main`](https://img.shields.io/github/commit-activity/m/Ignotum77/YT-Nonstop?label=Commits%20%60main%60&color=succes)](https://github.com/Ignotum77/YT-Nonstop/commits/)
-[![Last commit `main`](https://img.shields.io/github/last-commit/Ignotum77/YT-Nonstop?label=Last%20commit%20%60main%60&color=informational)](https://github.com/Ignotum77/YT-Nonstop/commits/main) </br>
+[![Commit rate](https://img.shields.io/github/commit-activity/m/Ignotum77/YT-Nonstop?label=Commits&color=succes)](https://github.com/Ignotum77/YT-Nonstop/commits/)
+[![Last commit](https://img.shields.io/github/last-commit/Ignotum77/YT-Nonstop?label=Last%20commit&color=informational)](https://github.com/Ignotum77/YT-Nonstop/commits/) </br>
 [![Issues](https://img.shields.io/github/issues/Ignotum77/YT-Nonstop?label=Issues&color=red)](https://github.com/Ignotum77/YT-Nonstop/issues)
 [![Issues](https://img.shields.io/github/issues-closed/Ignotum77/YT-Nonstop?color=green&label=Issues)](https://github.com/Ignotum77/YT-Nonstop/issues?q=is%3Aissue+is%3Aclosed)
 [![GitHub Release Date](https://img.shields.io/github/release-date/Ignotum77/YT-Nonstop?color=white&label=Latest%20Release)](https://github.com/Ignotum77/YT-Nonstop/releases/)
@@ -10,8 +10,11 @@
 ***
 # YT-Nonstop
 
-Autoclicker for Youtube's latest "feature" - Video paused. Continue watching?</br>
-Furthermore it keeps YouTube running and auto-skip to the next video on the list 🔥
+It gets you rid of Youtube's "feature" - Video paused. Continue watching?</br>
+It also comes with a build-in autoplay on/off feature that either disables YT's autoplay or, when enabled, skips the endscreen countdown.
+Therefore YT's own autoplay button is hidden.</br>
+Beside support for `www.youtube.com` and `music.youtube.com`, it also supports `m.youtube.com` for both desktop and Android.
+Be aware that all YouTube tabs will be reloaded on installation. Otherwise this addon doesn't work correctly.
 
 <p align="center">
 <a href="https://addons.mozilla.org/en-US/firefox/addon/yt_nonstop/"><img src="https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png" alt="Get YT-Nonstop for Firefox"></a>

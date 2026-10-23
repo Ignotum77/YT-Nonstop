@@ -1,38 +1,20 @@
 "use strict";
 
-chrome.runtime.onStartup.addListener(() => {
-  ShowPopup();
-});
-chrome.runtime.onInstalled.addListener(() => {
-  Reload();
-  ShowPopup();
-});
-
-function ShowPopup() {
-  chrome.action.disable();
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
-    chrome.declarativeContent.onPageChanged.addRules([
-      {
-        conditions: [
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlMatches: '^https:\/\/(www|music)\.youtube\.com' }
-          })
-        ],
-        actions: [new chrome.declarativeContent.ShowAction()]
-      }
-    ]);
-  });
-};
-
+// Reload YT tabs on install to let the autonav on/off work
 function Reload() {
-  chrome.tabs.query({
+  browser.tabs.query({
     url: [
       "https://www.youtube.com/*",
-      "https://music.youtube.com/*"
+      "https://music.youtube.com/*",
+      "https://m.youtube.com/*"
     ]
-  }, (tabs) => {
-    for(let tab of tabs) {
-      chrome.tabs.reload(tab.id)
+  }).then(tabs => {
+    for (const tab of tabs) {
+      browser.tabs.reload(tab.id);
     }
   });
-};
+}
+
+browser.runtime.onInstalled.addListener(() => {
+  Reload();
+});

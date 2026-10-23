@@ -1,25 +1,25 @@
 {
   "name": "YT-NonStop",
   "author": "Ignotum77",
-  "version": "1.7.1",
-  "description": "Deletes the annoying \"Video paused. Continue watching?\" confirmation on YouTube and keeps YouTube running nonstop without autoplay message!",
+  "version": "1.8.4",
+  "description": "It gets you rid of Youtube's \"feature\" - Video paused. Continue watching? It also comes with an autoplay on/off feature that disables YT's autoplay or skips the endscreen countdown to the next video.",
   "browser_specific_settings": {
     "gecko": {
       "id": "@YT-NonStop",
-      "strict_min_version": "100.0",
+      "strict_min_version": "142.0",
       "data_collection_permissions": {
         "required": ["none"]
       }
     }
   },
   "permissions": [ "declarativeContent", "storage", "tabs" ],
-  "host_permissions": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ],
+  "host_permissions": [ "https://www.youtube.com/*", "https://music.youtube.com/*", "https://m.youtube.com/*" ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ],
+      "matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*", "https://m.youtube.com/*" ],
       "js": [ "script.js" ],
       "run_at": "document_end"
     }
@@ -27,13 +27,13 @@
   "web_accessible_resources": [
     {
       "resources": [ "autoconfirm&skip.js" ],
-      "matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ]
+      "matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*", "https://m.youtube.com/*" ]
     }
   ],
-  "action": {
+  "page_action": {
     "default_icon": "images/ytn128.png",
     "default_popup": "popup.html",
-    "show_matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*" ]
+    "show_matches": [ "https://www.youtube.com/*", "https://music.youtube.com/*", "https://m.youtube.com/*" ]
   },
   "icons": {
     "48": "images/ytn48.png",
